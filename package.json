@@ -1,0 +1,26 @@
+{
+  "name": "socialnetwork",
+  "version": "1.0.0",
+  "description": "A social network",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidskater/socialNetwork.git"
+  },
+  "author": "William Masters",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sidskater/socialNetwork/issues"
+  },
+  "homepage": "https://github.com/sidskater/socialNetwork#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.17.1",
+    "express-subdomain": "^1.0.5",
+    "mysql": "^2.17.1",
+    "mysql2": "^1.6.5"
+  }
+}
