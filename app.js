@@ -11,7 +11,7 @@ app.set("view engine", "ejs")
 const db = mysql.createConnection({ // Establishes connection with the database
   host: 'localhost',
   user: 'root',
-  password: "Sid_skater10",
+  password: "____",
   database: "socialnetworkdb"
 });
 
