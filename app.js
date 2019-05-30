@@ -1,20 +1,24 @@
 const express = require("express");
 const app = express();
-const mysql = require('mysql');
-
+const mysql = require("mysql");
+const bodyParser = require("body-parser");
+const sql = require("./sqlQueries.js");
+const tools = require("./tools.js");
 
 const port = 80; // the port the server listens for
 app.listen(port);
 
 app.set("view engine", "ejs")
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
+// DATABASE SETUP
 const db = mysql.createConnection({ // Establishes connection with the database
   host: 'localhost',
   user: 'root',
-  password: "____",
+  password: "Sid_skater10",
   database: "socialnetworkdb"
 });
-
 db.connect( function(err) { // Tests connection with the database
    if(err) { // test for error
       console.error("Error connectiong: " + err.stack);
@@ -24,13 +28,13 @@ db.connect( function(err) { // Tests connection with the database
 });
 
 
-
-
-app.get("/", function(req,res) { // Home page
+// Home page
+app.get("/", function(req,res) {
    res.render("home");
 });
 
-app.get("/user/:username", function(req,res) { // user page
+// user page
+app.get("/user/:username", function(req,res) {
    // Querys database for the username in the url
    db.query(`SELECT * FROM socialnetworkdb.user WHERE username = '${req.params.username}'`, function(error, results, fields) {
       if(error)  { // checks for error with the query
@@ -42,20 +46,23 @@ app.get("/user/:username", function(req,res) { // user page
          res.send(results[0]);
       }
    });
+});
+
+// Register page
+app.get("/register", function(req,res) {
+   res.render("register");
+});
+app.post("/register", function(req,res) {
+   res.send("Data recived");
+   sql.createUser(req.body.username, tools.hash(req.body.password));
 
 });
 
-/*
-
-INSERT INTO user (username, display_name, bio, dt_created, password_hash) values (
-	'admin',
-    'William Masters'
-    'The site creator',
-    dateTime.now(),
-    'abcdefg'
-);
 
 
 
 
-*/
+
+
+
+// + req.body.username
