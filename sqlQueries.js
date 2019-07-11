@@ -34,6 +34,19 @@ module.exports = {
          }
       });
    },
+   authenticateLogin: function(username, passwordHash, fn) {
+      db.query(`SELECT * FROM socialnetworkdb.user WHERE username = '${username}' AND password_hash = '${passwordHash}';`, function(error, results, fields) {
+         if(error) {
+            console.log("db error SELECT, authenticateLogin: " + error);
+            throw error;
+         }
+         if(results.length < 1) {// if no user is returned
+            fn(null);
+         } else { // returns first user with the same name, should only be possible to have one
+            fn(results[0]);
+         }
+      });
+   },
 
    // UPDATE
    updatePassword: function(username, newPasswordHash) {

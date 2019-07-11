@@ -1,8 +1,26 @@
 <html>
+
    <head>
 
    </head>
+
    <body>
       <h1>Home</h1>
+
+      <% if(typeof user !== "undefined") { %>
+      <h2>Welcome
+         <%= user.display_name %>
+      </h2>
+      <% } %>
+
+      <ul>
+         <label>Links</label>
+         <li><a href="../login">login</a></li>
+         <% if(typeof user !== "undefined") { %>
+         <li><a href="../user/<%= user.username %>"> My account </a></li>
+         <% } %>
+      </ul>
+
    </body>
+
 </html>
