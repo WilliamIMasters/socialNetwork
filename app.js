@@ -50,7 +50,6 @@ app.get("/login", function(req,res) {
 });
 app.post("/login", function(req,res) {
    if(req.body.username != null && req.body.password != null && req.body.username != "" && req.body.password != "") {
-
       sql.authenticateLogin(req.body.username, tools.hash(req.body.password), function(user) {
          console.log("/login . user: " + user);
          if(user != null) {
@@ -66,6 +65,19 @@ app.post("/login", function(req,res) {
    }
 
 });
+// Logout
+app.get("/logout", function(req,res) {
+   if(req.session.user) {
+      res.render("logout");
+   } else {
+      res.redirect("../login");
+   }
+});
+app.post("/logout", function(req,res) {
+   req.session.destroy();
+   res.redirect("/");
+});
+
 
 // Register page
 app.get("/register", function(req,res) {
