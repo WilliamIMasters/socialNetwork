@@ -96,7 +96,17 @@ app.get("/admin", function(req,res) {
    res.render("admin");
 });
 
+app.get("/post/:postid", function(req,res) {
+   sql.getPost(req.params.postid, function(post) {
+      if(post != null) {
+         res.render("post", {user: req.session.user, postData: post});
+         //res.send(post);
+      } else {
+         res.send("Post does not exist");
+      }
+   });
 
+});
 
 
 

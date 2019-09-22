@@ -48,6 +48,20 @@ module.exports = {
       });
    },
 
+   getPost: function(postid, fn) {
+      db.query(`SELECT * FROM socialnetworkdb.post WHERE postid = '${postid}';`, function(err, results, fields) {
+         if(err) {
+            console.log("db error SELECT, getPost: " + err);
+            throw err;
+         }
+         if(results.length < 1) {// if no post is returned
+            fn(null);
+         } else { // returns first post with the same id, should only be possible to have one
+            fn(results[0]);
+         }
+      });
+   },
+
    // UPDATE
    updatePassword: function(username, newPasswordHash) {
       db.query(`UPDATE socialnetworkdb.user SET password_hash = 'dd4d4f9003a3c3a7ca95e26145f4a9c3' WHERE username = 'admin';`, function(error, results, fields) {
