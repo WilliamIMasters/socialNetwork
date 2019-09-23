@@ -34,6 +34,19 @@ module.exports = {
          }
       });
    },
+   checkUserExists: function(username, fn) {
+      db.query(`SELECT * FROM socialnetworkdb.user WHERE username = '${username}'`, function(error, results, fields) {
+         if(error)  { // checks for error with the query
+            console.error("db error");
+            fn(null);
+         }
+         if(results.length < 1) { // if no user is returned
+            fn(false);
+         } else { // returns first user with the same name, should only be possible to have one
+            fn(true);
+         }
+      });
+   },
    authenticateLogin: function(username, passwordHash, fn) {
       db.query(`SELECT * FROM socialnetworkdb.user WHERE username = '${username}' AND password_hash = '${passwordHash}';`, function(error, results, fields) {
          if(error) {

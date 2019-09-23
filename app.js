@@ -31,6 +31,7 @@ app.get("/", function(req,res) {
 // user page
 app.get("/user/:username", function(req,res) {
    sql.getUser(req.params.username, function(user) {
+      console.log("app get user: " + user);
       if(user != null) {
          res.send(user);
       } else {
@@ -81,11 +82,22 @@ app.post("/logout", function(req,res) {
 
 // Register page
 app.get("/register", function(req,res) {
-   res.render("register");
+   if(req.session.user) {
+      res.send("Already logged in <a href='/'>Home</a>");
+
+   } else {
+      res.render("register");
+   }
 });
 app.post("/register", function(req,res) {
-   res.send("Data recived");
-   sql.createUser(req.body.username, tools.hash(req.body.password));
+   sql.checkUserExists(req.body.username, function(exists) {
+      if(exists) {
+         res.send("Username already exists, please pick another <a href='/register'>Home</a>");
+      } else {
+         res.send("Data recived");
+         sql.createUser(req.body.username, tools.hash(req.body.password));
+      }
+   });
 });
 
 app.get("/loginCheck", function(req,res) {
@@ -108,6 +120,13 @@ app.get("/post/:postid", function(req,res) {
 
 });
 
+app.get("/test", function(req,res) {
+
+   sql.checkUserExists("test121", function(exists) {
+      res.send(exists.toString());
+
+   });
+});
 
 
 
