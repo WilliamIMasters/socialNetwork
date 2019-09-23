@@ -33,7 +33,11 @@ app.get("/user/:username", function(req,res) {
    sql.getUser(req.params.username, function(user) {
       console.log("app get user: " + user);
       if(user != null) {
-         res.send(user);
+         sql.getUsersRecentPosts(req.params.username, function(results) {
+            console.log("results: " + results[0]);
+            res.render("user", {user: user, posts: results});
+         });
+
       } else {
          res.send("User does not exist");
       }
@@ -121,11 +125,7 @@ app.get("/post/:postid", function(req,res) {
 });
 
 app.get("/test", function(req,res) {
-
-   sql.checkUserExists("test121", function(exists) {
-      res.send(exists.toString());
-
-   });
+   res.render("test");
 });
 
 

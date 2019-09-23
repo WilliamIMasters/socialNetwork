@@ -34,6 +34,20 @@ module.exports = {
          }
       });
    },
+   getUsersRecentPosts: function(username, fn) {
+      console.log(`SELECT * FROM socialnetworkdb.post where username = "${username}" LIMIT ${5};`);
+      db.query(`SELECT * FROM socialnetworkdb.post where username = "${username}" LIMIT ${5};`, function(error, results, fields) {
+         if(error)  { // checks for error with the query
+            console.error("db error, getUsersRecentPosts : " + error);
+            fn(null);
+         }
+         if(results.length < 1) { // if no user is returned
+            fn(null);
+         } else { // returns first user with the same name, should only be possible to have one
+            fn(results);
+         }
+      });
+   },
    checkUserExists: function(username, fn) {
       db.query(`SELECT * FROM socialnetworkdb.user WHERE username = '${username}'`, function(error, results, fields) {
          if(error)  { // checks for error with the query
