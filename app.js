@@ -13,7 +13,7 @@ app.listen(port);
 app.set("view engine", "ejs")
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-//app.use(cookieParser());
+app.use(express.static(__dirname + "/node_modules/bootstrap/dist"));
 app.use(session({
    secret: "socialNetwork",
    resave: true,
@@ -25,7 +25,7 @@ app.use(session({
 
 // Home page
 app.get("/", function(req,res) {
-   res.render("home", {user: req.session.user});
+   res.render("pages/home", {user: req.session.user});
 });
 
 // user page
@@ -34,8 +34,12 @@ app.get("/user/:username", function(req,res) {
       console.log("app get user: " + user);
       if(user != null) {
          sql.getUsersRecentPosts(req.params.username, function(results) {
-            console.log("results: " + results[0]);
-            res.render("user", {user: user, posts: results});
+            //console.log("results: " + results[0]);
+            if(results != null) {
+               res.render("pages/user", {user: user, posts: results});
+            } else {
+               res.render("pages/user", {user: user, posts: null});
+            }
          });
 
       } else {
@@ -50,7 +54,7 @@ app.get("/login", function(req,res) {
    if(req.session.user) {
       res.send("Already logged in");
    } else {
-      res.render("login", {user: req.session.user});
+      res.render("pages/login", {user: req.session.user});
    }
 });
 app.post("/login", function(req,res) {
@@ -73,7 +77,7 @@ app.post("/login", function(req,res) {
 // Logout
 app.get("/logout", function(req,res) {
    if(req.session.user) {
-      res.render("logout");
+      res.render("pages/logout");
    } else {
       res.redirect("../login");
    }
@@ -90,7 +94,7 @@ app.get("/register", function(req,res) {
       res.send("Already logged in <a href='/'>Home</a>");
 
    } else {
-      res.render("register");
+      res.render("pages/register");
    }
 });
 app.post("/register", function(req,res) {
@@ -109,13 +113,13 @@ app.get("/loginCheck", function(req,res) {
 });
 
 app.get("/admin", function(req,res) {
-   res.render("admin");
+   res.render("pages/admin");
 });
 
 app.get("/post/:postid", function(req,res) {
    sql.getPost(req.params.postid, function(post) {
       if(post != null) {
-         res.render("post", {user: req.session.user, postData: post});
+         res.render("pages/post", {user: req.session.user, postData: post});
          //res.send(post);
       } else {
          res.send("Post does not exist");
@@ -125,7 +129,7 @@ app.get("/post/:postid", function(req,res) {
 });
 
 app.get("/test", function(req,res) {
-   res.render("test");
+   res.render("pages/template");
 });
 
 
